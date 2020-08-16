@@ -42,21 +42,15 @@ class ResNet:
             for j in range(0, stages[i]-1):
                 x = ResNet.residual_module(x, filters[i+1], chan_dim=chan_dim,stride=(1,1))
             
-            x = BatchNormalization(axis=chan_dim, momentum=mom, epsilon=eps)(x)
-            x = Activation("relu")(x)
-            x = AveragePooling2D((8,8))(x)
-            x = Flatten()(x)
-            x = Dense(num_classes, kernel_regularizer=l2(reg))(x)
-            x = Activation("softmax")(x)
+        x = BatchNormalization(axis=chan_dim, momentum=mom, epsilon=eps)(x)
+        x = Activation("relu")(x)
+        x = AveragePooling2D((8,8))(x)
+        x = Flatten()(x)
+        x = Dense(num_classes, kernel_regularizer=l2(reg))(x)
+        x = Activation("softmax")(x)
 
-            model = Model(inputs,x,name='resnet')
+        model = Model(inputs,x,name='resnet')
         return model
-
-
-model = ResNet.build(64,64,3,200,(9,9,9),(32,64,128,256))
-plot_model(model, to_file="./ResNet.png")
-
-        
 
 
 
